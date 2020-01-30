@@ -1,30 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul 17 09:42:56 2018
 
-version v2.0
-按日期分放文章
 
-@author: HP
 
 """
-
-
-
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 from time import sleep
 import datetime
 
 #import win32api
-work_space=r'D://Mainland/Campus Life/ZXtrainee/codes'
+work_space='./'
 invalid_char=['|','.',':',',','*','\\','/','/']
 #--------------------------------------------
 def sdtime(time):
-    # 改year-month-day 为标准时间格式：year年month月day日
     part=time.split('-')
-    if len(part)==2: # 没有year
+    if len(part)==2: 
         year=str(datetime.datetime.now().year)
     else:
         year=part[-3]
@@ -91,9 +84,17 @@ def download(x):
     logfp.close()
     print('downloaded %d articles.' % count)
 
-prev_time = datetime.datetime.now() #当前时间        
+prev_time = datetime.datetime.now()       
 url_xueqiu=r'https://xueqiu.com/'
-x=webdriver.Chrome(r'C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe')
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument('--disable-dev-shm-usage')
+chromedriver = "/usr/bin/chromedriver"
+os.environ["webdriver.chrome.driver"] = chromedriver
+x = webdriver.Chrome(chrome_options=chrome_options,executable_path=chromedriver)
+#x=webdriver.Chrome(r'/usr/bin/chromedriver')
 x.get(url_xueqiu)
 load(x,1000)
 download(x)
